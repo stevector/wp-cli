@@ -111,9 +111,28 @@ Feature: Manage WordPress menus
     """
     0
     """
-    
+
   Scenario: Preserve grandparent when parent is removed.
+
+    When I run `wp menu create "Grandparent Test"``
+    Then STDOUT should not be empty
+
+    When I run `wp menu item add-term grandparent-test Grandparent http://example.com/grandparent --porcelain`
+    Then save STDOUT as {GRANDPARENT_ID}
+
+    When I run `wp menu item add-term grandparent-test  Parent   http://example.com/parent   --porcelain  --parent-id={GRANDPARENT_ID}`
+    Then save STDOUT as {PARENT_ID}
+
+    When I run `wp menu item add-term grandparent-test  Child http://example.com/child   --porcelain  --parent-id={PARENT_ID}`
+    Then save STDOUT as {child_ID}
+
+    When I run `wp menu item list grandparent-test --fields=type,title,position,link,menu_item_parent`
+    Then STDOUT should be a table containing rows:
+      | type      | title       | position | link                           | menu_item_parent |
+      | custom    | Grandparent |  1       | http://example.com/grandparent | 0                |
+      | custom    | Parent      |  2       | http://example.com/parent      | {GRANDPARENT_ID} |
+      | custom    | Child       |  3       | http://example.com/child       | {PARENT_ID}      |
+
     Given a grandparent, parent and child menu item
     When the parent is deleted
     Then the grandparent becomes the parent of the child
-    
