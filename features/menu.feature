@@ -126,17 +126,17 @@ Feature: Manage WordPress menus
     When I run `wp menu item add-term grandparent-test  Child http://example.com/child   --porcelain  --parent-id={PARENT_ID}`
     Then save STDOUT as {child_ID}
 
-    When I run `wp menu item list grandparent-test --fields=type,title,position,link,menu_item_parent`
+    When I run `wp menu item list grandparent-test --fields=type,title,position,link,menu_item_parent,db_id`
     Then STDOUT should be a table containing rows:
-      | type      | title       | position | link                           | menu_item_parent |
-      | custom    | Grandparent |  1       | http://example.com/grandparent | 0                |
-      | custom    | Parent      |  2       | http://example.com/parent      | {GRANDPARENT_ID} |
-      | custom    | Child       |  3       | http://example.com/child       | {PARENT_ID}      |
+      | type      | title       | position | link                           | menu_item_parent | db_id            |
+      | custom    | Grandparent |  1       | http://example.com/grandparent | 0                | {GRANDPARENT_ID} |
+      | custom    | Parent      |  2       | http://example.com/parent      | {GRANDPARENT_ID} | {PARENT_ID}      |
+      | custom    | Child       |  3       | http://example.com/child       | {PARENT_ID}      | {CHILD_ID}       |
 
     When I run `wp menu item delete {PARENT_ID}`
 
-    When I run `wp menu item list grandparent-test --fields=type,title,position,link,menu_item_parent`
+    When I run `wp menu item list grandparent-test --fields=type,title,position,link,menu_item_parent,db_id`
     Then STDOUT should be a table containing rows:
-      | type      | title       | position | link                           | menu_item_parent |
-      | custom    | Grandparent |  1       | http://example.com/grandparent | 0                |
-      | custom    | Child       |  3       | http://example.com/child       | {GRANDPARENT_ID} |
+      | type      | title       | position | link                           | menu_item_parent | db_id            |
+      | custom    | Grandparent |  1       | http://example.com/grandparent | 0                | {GRANDPARENT_ID} |
+      | custom    | Child       |  3       | http://example.com/child       | {GRANDPARENT_ID} | {CHILD_ID}       |
