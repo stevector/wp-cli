@@ -111,3 +111,7 @@ Feature: Manage WordPress menus
     """
     0
     """
+    
+  Scenario: Preserve grandparent when parent is removed.
+    Fail
+    
