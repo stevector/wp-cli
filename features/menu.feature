@@ -114,7 +114,7 @@ Feature: Manage WordPress menus
 
   Scenario: Preserve grandparent when parent is removed.
 
-    When I run `wp menu create "Grandparent Test"``
+    When I run `wp menu create "Grandparent Test"`
     Then STDOUT should not be empty
 
     When I run `wp menu item add-term grandparent-test Grandparent http://example.com/grandparent --porcelain`
