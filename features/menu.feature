@@ -113,5 +113,7 @@ Feature: Manage WordPress menus
     """
     
   Scenario: Preserve grandparent when parent is removed.
-    Fail
+    Given a grandparent, parent and child menu item
+    When the parent is deleted
+    Then the grandparent becomes the parent of the child
     
