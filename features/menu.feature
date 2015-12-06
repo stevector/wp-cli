@@ -117,7 +117,7 @@ Feature: Manage WordPress menus
     When I run `wp menu create "Grandparent Test"`
     Then STDOUT should not be empty
 
-    When I run `wp menu item add-term grandparent-test Grandparent http://example.com/grandparent --porcelain`
+    When I run `wp menu item add-term grandparent-test gp http://example.com/grandparent --porcelain`
     Then save STDOUT as {GRANDPARENT_ID}
 
     When I run `wp menu item add-term grandparent-test  Parent   http://example.com/parent   --porcelain  --parent-id={GRANDPARENT_ID}`
