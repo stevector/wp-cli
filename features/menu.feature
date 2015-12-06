@@ -126,17 +126,17 @@ Feature: Manage WordPress menus
     When I run `wp menu item add-custom grandparent-test  Child http://example.com/child   --porcelain  --parent-id={PARENT_ID}`
     Then save STDOUT as {CHILD_ID}
 
-    When I run `wp menu item list grandparent-test --fields=title,position,link,menu_item_parent,db_id`
+    When I run `wp menu item list grandparent-test --fields=db_id,menu_item_parent`
     Then STDOUT should be a table containing rows:
-      | title       | position | link                           | menu_item_parent | db_id            |
-      | Grandparent |  1       | http://example.com/grandparent | 0                | {GRANDPARENT_ID} |
-      | Parent      |  2       | http://example.com/parent      | {GRANDPARENT_ID} | {PARENT_ID}      |
-      | Child       |  3       | http://example.com/child       | {PARENT_ID}      | {CHILD_ID}       |
+      | db_id            | menu_item_parent |
+      | {GRANDPARENT_ID} | 0                |
+      | {PARENT_ID}      | {GRANDPARENT_ID} |
+      | {CHILD_ID}       | {PARENT_ID}      |
 
     When I run `wp menu item delete {PARENT_ID}`
 
-    When I run `wp menu item list grandparent-test --fields=type,title,position,link,menu_item_parent,db_id`
+    When I run `wp menu item list grandparent-test --fields=db_id,menu_item_parent`
     Then STDOUT should be a table containing rows:
-      | title       | position | link                           | menu_item_parent | db_id            |
-      | Grandparent |  1       | http://example.com/grandparent | 0                | {GRANDPARENT_ID} |
-      | Child       |  3       | http://example.com/child       | {GRANDPARENT_ID} | {CHILD_ID}       |
+      | db_id            | menu_item_parent |
+      | {GRANDPARENT_ID} | 0                |
+      | {CHILD_ID}       | {GRANDPARENT_ID} |
