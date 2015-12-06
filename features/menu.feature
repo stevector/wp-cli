@@ -133,6 +133,10 @@ Feature: Manage WordPress menus
       | custom    | Parent      |  2       | http://example.com/parent      | {GRANDPARENT_ID} |
       | custom    | Child       |  3       | http://example.com/child       | {PARENT_ID}      |
 
-    Given a grandparent, parent and child menu item
-    When the parent is deleted
-    Then the grandparent becomes the parent of the child
+    When I run `wp menu item delete {PARENT_ID}
+
+    When I run `wp menu item list grandparent-test --fields=type,title,position,link,menu_item_parent`
+    Then STDOUT should be a table containing rows:
+      | type      | title       | position | link                           | menu_item_parent |
+      | custom    | Grandparent |  1       | http://example.com/grandparent | 0                |
+      | custom    | Child       |  3       | http://example.com/child       | {GRANDPARENT_ID} |
